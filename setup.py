@@ -38,11 +38,11 @@ setup(
     license="EPL-1.0",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
-    keywords='chariot_northbound_dispatcher',
-    name='chariot_northbound_dispatcher',
+    keywords='chariot_southbound_dispatcher',
+    name='chariot_southbound_dispatcher',
     packages=find_packages(include=[
-        'chariot_northbound_dispatcher',
-        'chariot_northbound_dispatcher.*'
+        'chariot_southbound_dispatcher',
+        'chariot_southbound_dispatcher.*'
     ]),
     entry_points={
           'console_scripts': [
@@ -53,7 +53,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/theofilis/chariot_northbound_dispatcher',
+    url='https://github.com/theofilis/chariot_southbound_dispatcher',
     version='0.1.0',
     zip_safe=False,
 )
