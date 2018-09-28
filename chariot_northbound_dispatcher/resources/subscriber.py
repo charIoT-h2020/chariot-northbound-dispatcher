@@ -18,6 +18,7 @@ rules = {
     }
 }
 
+
 class SubscriberResource(object):
     def __init__(self, engine):
         self.subscribers = [
