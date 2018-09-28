@@ -3,12 +3,14 @@
 import falcon
 import falcon_jsonify
 
+from chariot_base.connector import LocalConnector
+
+from chariot_northbound_dispatcher.dispatcher import Dispatcher
 from chariot_northbound_dispatcher.resources import SubscriberResource
-from chariot_northbound_dispatcher.dispatcher import Consumer, Dispatcher
 
 
 # Initialize connection to northbound
-northbound = Consumer('northbound', '172.18.1.3')
+northbound = LocalConnector('northbound', '172.18.1.3')
 northbound.start(False)
 
 engine = Dispatcher()

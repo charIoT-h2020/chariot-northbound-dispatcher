@@ -12,7 +12,11 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'paho-mqtt'
+    'paho-mqtt',
+    'influxdb',
+    'cloudant',
+    'ibmiotf',
+    'chariot_base'
 ]
 
 setup_requirements = [ ]
@@ -35,11 +39,11 @@ setup(
     license="EPL-1.0",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
-    keywords='chariot_southbound_dispatcher',
-    name='chariot_southbound_dispatcher',
+    keywords='chariot_northbound_dispatcher',
+    name='chariot_northbound_dispatcher',
     packages=find_packages(include=[
-        'chariot_southbound_dispatcher',
-        'chariot_southbound_dispatcher.*'
+        'chariot_northbound_dispatcher',
+        'chariot_northbound_dispatcher.*'
     ]),
     entry_points={
           'console_scripts': [
@@ -50,7 +54,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/theofilis/chariot_southbound_dispatcher',
+    url='https://github.com/theofilis/chariot_northbound_dispatcher',
     version='0.1.0',
     zip_safe=False,
 )
