@@ -41,6 +41,7 @@ class Dispatcher(object):
         destination = message['destination']
         sensor_id = message['sensor_id']
         value = json.dumps(message['value'])
-
-        if sensor_id in self.southbound[destination]:
-            self.northbound.publish('%s/%s' % (destination, sensor_id), value)
+        print(destination, sensor_id, value)
+        if self.subscribers[destination] is not None:
+            if sensor_id in self.subscribers[destination].sensors:
+                self.northbound.publish('%s/%s' % (destination, sensor_id), value)
