@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 from chariot_base.model import Subscriber
 
 
@@ -36,4 +38,4 @@ class Dispatcher(object):
         ])
 
     def forward(self, message):
-        print(message)
+        self.northbound.publish('%s/%s' % (message['destination'], message['sensor_id']), json.dumps(message['value']))
