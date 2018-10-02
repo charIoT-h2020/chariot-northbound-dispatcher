@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 
 import falcon
 import falcon_jsonify
@@ -23,10 +24,7 @@ class SouthboundConnector(LocalConnector):
         print("log[%s]: %s" % (level, buf))
 
     def on_message(self, client, userdata, message):
-        print("message received ", str(message.payload.decode("utf-8")))
-        print("message topic=", message.topic)
-        print("message qos=", message.qos)
-        print("message retain flag=", message.retain)
+        self.dispatcher.forward(json.loads(str(message.payload.decode("utf-8"))))
 
 
 dispatcher = Dispatcher()

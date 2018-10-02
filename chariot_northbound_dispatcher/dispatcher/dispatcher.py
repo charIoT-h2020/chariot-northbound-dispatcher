@@ -34,3 +34,6 @@ class Dispatcher(object):
         self.southbound.subscribe([
             ('northbound/#', 0)
         ])
+
+    def forward(self, message):
+        print(message)
