@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from chariot_northbound_dispatcher.model import Subscriber
+from chariot_base.model import Subscriber
 
 
 class SubscriberResource(object):
