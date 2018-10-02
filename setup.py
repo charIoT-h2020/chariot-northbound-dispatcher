@@ -18,8 +18,7 @@ requirements = [
     'ibmiotf',
     'chariot_base',
     'gunicorn',
-    'falcon',
-    'falcon_jsonify'
+    'falcon'
 ]
 
 setup_requirements = []
