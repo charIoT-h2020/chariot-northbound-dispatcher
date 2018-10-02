@@ -6,4 +6,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN python setup.py install
-CMD ["logs"]
+
+EXPOSE 8020
+
+ENTRYPOINT ["/usr/local/bin/gunicorn", "--config", "/usr/src/app/gunicorn.py", "chariot_northbound_dispatcher.app:app"]
