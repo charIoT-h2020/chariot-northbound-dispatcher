@@ -8,7 +8,8 @@ Northbound dispatcher of the Chariot Project
 
 ## Features
 
-* TODO
+* Actuator subscription
+* Message forwarding
 
 ## Credits
 
