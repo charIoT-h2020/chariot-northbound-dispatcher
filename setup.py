@@ -16,7 +16,8 @@ requirements = [
     'influxdb',
     'cloudant',
     'ibmiotf',
-    'chariot_base'
+    'chariot_base',
+    'gunicorn'
 ]
 
 setup_requirements = []
