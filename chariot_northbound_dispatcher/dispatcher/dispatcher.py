@@ -7,20 +7,20 @@ from chariot_base.model import Subscriber
 class Dispatcher(object):
     def __init__(self):
         self.subscribers = {
-            'urn:ngsi-ld:bms': Subscriber('urn:ngsi-ld:bms'),
-            'urn:ngsi-ld:security': Subscriber('urn:ngsi-ld:security')
+            'bms': Subscriber('bms'),
+            'security': Subscriber('security')
         }
 
-        self.subscribers['urn:ngsi-ld:bms'].sensors = {
-            'urn:ngsi-ld:5410ec4d1601_humidity',
-            'urn:ngsi-ld:5410ec4d1601_temperature',
-            'urn:ngsi-ld:5410ec4d1601_din01'
+        self.subscribers['bms'].sensors = {
+            '5410ec4d1601_humidity',
+            '5410ec4d1601_temperature',
+            '5410ec4d1601_din01'
         }
 
-        self.subscribers['urn:ngsi-ld:security'].sensors = {
-            'urn:ngsi-ld:5410ec4d1601_din02',
-            'urn:ngsi-ld:5410ec4d1601_din03',
-            'urn:ngsi-ld:5410ec4d1601_din04'
+        self.subscribers['security'].sensors = {
+            '5410ec4d1601_din02',
+            '5410ec4d1601_din03',
+            '5410ec4d1601_din04'
         }
 
         self.southbound = None
