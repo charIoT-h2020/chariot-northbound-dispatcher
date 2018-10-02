@@ -6,6 +6,11 @@ Northbound dispatcher of the Chariot Project
 
 ## Build docker images
 
+```
+docker build --tag chariot_northbound_dispatcher .
+```
+
+
 ## Features
 
 * Actuator subscription

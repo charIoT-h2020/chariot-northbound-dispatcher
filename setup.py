@@ -17,7 +17,9 @@ requirements = [
     'cloudant',
     'ibmiotf',
     'chariot_base',
-    'gunicorn'
+    'gunicorn',
+    'falcon',
+    'falcon_jsonify'
 ]
 
 setup_requirements = []
