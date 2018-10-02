@@ -1,15 +1,36 @@
 # -*- coding: utf-8 -*-
+from chariot_base.model import Subscriber
 
 
 class Dispatcher(object):
     def __init__(self):
-        pass
+        self.subscribers = {
+            'urn:ngsi-ld:bms': Subscriber('urn:ngsi-ld:bms'),
+            'urn:ngsi-ld:security': Subscriber('urn:ngsi-ld:security')
+        }
 
-    def on_message(self, client, userdata, message):
-        print("message received ", str(message.payload.decode("utf-8")))
-        print("message topic=", message.topic)
-        print("message qos=", message.qos)
-        print("message retain flag=", message.retain)
+        self.subscribers['urn:ngsi-ld:bms'].sensors = {
+            'urn:ngsi-ld:5410ec4d1601_humidity',
+            'urn:ngsi-ld:5410ec4d1601_temperature',
+            'urn:ngsi-ld:5410ec4d1601_din01'
+        }
 
-    def on_log(self, client, userdata, level, buf):
-        print("log: ", buf)
+        self.subscribers['urn:ngsi-ld:security'].sensors = {
+            'urn:ngsi-ld:5410ec4d1601_din02',
+            'urn:ngsi-ld:5410ec4d1601_din03',
+            'urn:ngsi-ld:5410ec4d1601_din04'
+        }
+
+        self.southbound = None
+        self.northbound = None
+
+    def inject(self, southbound, northbound):
+        self.southbound = southbound
+        self.northbound = northbound
+
+    def start(self):
+        self.northbound.start(False)
+        self.southbound.start(False)
+        self.southbound.subscribe([
+            ('northbound/#', 0)
+        ])

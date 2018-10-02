@@ -9,19 +9,38 @@ from chariot_northbound_dispatcher.dispatcher import Dispatcher
 from chariot_northbound_dispatcher.resources import SubscriberResource
 
 
-# Initialize connection to northbound
-northbound = LocalConnector('northbound', '172.18.1.3')
-northbound.start(False)
+class NorthboundConnector(LocalConnector):
+    def on_log(self, client, userdata, level, buf):
+        print("log[%s]: %s" % (level, buf))
 
-engine = Dispatcher()
 
-northbound.on_log = engine.on_log
-northbound.on_message = engine.on_message
+class SouthboundConnector(LocalConnector):
+    def __init__(self, client_od, broker, controller):
+        super().__init__(client_od, broker)
+        self.dispatcher = controller
+
+    def on_log(self, client, userdata, level, buf):
+        print("log[%s]: %s" % (level, buf))
+
+    def on_message(self, client, userdata, message):
+        print("message received ", str(message.payload.decode("utf-8")))
+        print("message topic=", message.topic)
+        print("message qos=", message.qos)
+        print("message retain flag=", message.retain)
+
+
+dispatcher = Dispatcher()
+
+northbound = NorthboundConnector('northbound', '172.18.1.3')
+southbound = SouthboundConnector('southbound', '172.18.1.2', dispatcher)
+
+dispatcher.inject(southbound, northbound)
+dispatcher.start()
 
 app = falcon.API(middleware=[
     falcon_jsonify.Middleware(help_messages=True)
 ])
 
-message = SubscriberResource(engine)
+messageResource = SubscriberResource(dispatcher)
 
-app.add_route('/subscriber', message)
+app.add_route('/subscriber', messageResource)
