@@ -38,4 +38,9 @@ class Dispatcher(object):
         ])
 
     def forward(self, message):
-        self.northbound.publish('%s/%s' % (message['destination'], message['sensor_id']), json.dumps(message['value']))
+        destination = message['destination']
+        sensor_id = message['sensor_id']
+        value = json.dumps(message['value'])
+
+        if sensor_id in self.southbound[destination]:
+            self.northbound.publish('%s/%s' % (destination, sensor_id), value)
