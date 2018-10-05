@@ -9,7 +9,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://gitlab.com/chariot-h2020/chariot_northbound_dispatcher/issues.
+Report bugs at https://gitlab.com/chariot-h2020/chariot-northbound-dispatcher/issues.
 
 If you are reporting a bug, please include:
 
@@ -19,12 +19,12 @@ If you are reporting a bug, please include:
 
 ### Fix Bugs
 
-Look through the GitHub issues for bugs. Anything tagged with "bug" and "help
+Look through the GitLab issues for bugs. Anything tagged with "bug" and "help
 wanted" is open to whoever wants to implement it.
 
 ### Implement Features
 
-Look through the GitHub issues for features. Anything tagged with "enhancement"
+Look through the GitLab issues for features. Anything tagged with "enhancement"
 and "help wanted" is open to whoever wants to implement it.
 
 ### Write Documentation
@@ -35,7 +35,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at https://gitlab.com/chariot-h2020/chariot_northbound_dispatcher/issues.
+The best way to send feedback is to file an issue at https://gitlab.com/chariot-h2020/chariot-northbound-dispatcher/issues.
 
 If you are proposing a feature:
 
@@ -74,13 +74,13 @@ Ready to contribute? Here's how to set up `chariot_northbound_dispatcher` for lo
    ```
    To get flake8 and tox, just pip install them into your virtualenv.
 
-6. Commit your changes and push your branch to GitHub::
+6. Commit your changes and push your branch to GitLab::
    ```
     $ git add .
     $ git commit -m "Your detailed description of your changes."
     $ git push origin name-of-your-bugfix-or-feature
    ```
-7. Submit a pull request through the GitHub website.
+7. Submit a pull request through the GitLab website.
 
 Pull Request Guidelines
 -----------------------
