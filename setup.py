@@ -12,13 +12,21 @@ with open('HISTORY.md') as history_file:
     history = history_file.read()
 
 requirements = [
+    'falcon',
+    'influxdb',
+    'chariot_base==0.6.4',
     'paho-mqtt',
+    'asyncio',
+    'gmqtt',
     'influxdb',
     'cloudant',
     'ibmiotf',
-    'chariot_base',
-    'gunicorn',
-    'falcon'
+    'pytest',
+    'fastecdsa',
+    'ecdsa',
+    'pycrypto',
+    'jaeger-client',
+    'pytest-asyncio'
 ]
 
 setup_requirements = []

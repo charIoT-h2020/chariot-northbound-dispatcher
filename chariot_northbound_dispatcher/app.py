@@ -1,44 +1,38 @@
 # -*- coding: utf-8 -*-
-import json
 
+import os
+import uuid
+import json
+import gmqtt
+import asyncio
+import signal
+import logging
 import falcon
 import falcon_jsonify
+from wsgiref import simple_server
 
-from chariot_base.connector import LocalConnector
-
-from chariot_northbound_dispatcher.dispatcher import Dispatcher
-from chariot_northbound_dispatcher.resources import SubscriberResource
-
-
-class NorthboundConnector(LocalConnector):
-    def on_log(self, client, userdata, level, buf):
-        print("log[%s]: %s" % (level, buf))
+from chariot_northbound_dispatcher.resources.forward import SinkAdapter
+from chariot_base.utilities import Tracer
 
 
-class SouthboundConnector(LocalConnector):
-    def __init__(self, client_od, broker, controller):
-        super().__init__(client_od, broker)
-        self.dispatcher = controller
+from chariot_base.utilities import open_config_file
 
-    def on_log(self, client, userdata, level, buf):
-        print("log[%s]: %s" % (level, buf))
+opts = open_config_file()
 
-    def on_message(self, client, userdata, message):
-        self.dispatcher.forward(json.loads(str(message.payload.decode("utf-8"))))
+options_engine = opts.northbound_dispatcher
+options_tracer = opts.tracer
+
+tracer = Tracer(options_tracer)
+tracer.init_tracer()
+
+app = falcon.API()
+
+sink = SinkAdapter()
+sink.inject_tracer(tracer)
+
+app.add_sink(sink, r'/(?P<engine>[a-zA-Z]+)(/(?P<path>.*))?\Z')
 
 
-dispatcher = Dispatcher()
-
-northbound = NorthboundConnector('northbound', '172.18.1.3')
-southbound = SouthboundConnector('southbound', '172.18.1.2', dispatcher)
-
-dispatcher.inject(southbound, northbound)
-dispatcher.start()
-
-app = falcon.API(middleware=[
-    falcon_jsonify.Middleware(help_messages=True)
-])
-
-messageResource = SubscriberResource(dispatcher)
-
-app.add_route('/subscriber', messageResource)
+if __name__ == '__main__':
+    httpd = simple_server.make_server('127.0.0.1', 8000, app)
+    httpd.serve_forever()

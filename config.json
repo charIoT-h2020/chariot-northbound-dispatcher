@@ -1,0 +1,96 @@
+{
+    "cloudant": {
+        "apikey": "vjg5C8qxZGMooDKoWF68u5omPT5rYEGfOSc91aCoZXjC",
+        "username": "56aa8c21-34f5-4e63-bf88-cf1ed1f94442-bluemix",
+        "orgId": "jv8w5u"
+    },
+    "watson_iot": {
+        "enabled": false,
+        "client": {
+            "org": "jv8w5u",
+            "type": "gateway",
+            "id": "testing",
+            "auth-method": "token",
+            "auth-token": "Q(lB@aTQ+hm@AVrdw!"
+        }
+    },
+    "local_storage": {
+        "host": "192.168.2.24",
+        "port": 8086,
+        "username": "root",
+        "password": "root",
+        "database": "fog_logs"
+    },
+    "brokers": {
+        "southbound": {
+            "host": "192.168.2.24",
+            "port": 1883,
+            "username": ""
+        },
+        "northbound": {
+            "host": "192.168.2.24",
+            "port": 1883,
+            "username": ""
+        }
+    },
+    "northbound_dispatcher": {
+        "gateways_ids": {
+            "iot-2/evt/nms_status/fmt/json": ""
+        },
+        "engines": [
+            "privacy",
+            "safety"
+        ],
+        "database": "fog_logs",
+        "table": "message",
+        "listen": "dispatcher/#"
+    },
+    "tracer" : {
+        "host": "192.168.2.24",
+        "enabled": true,
+        "port": 5775,
+        "service": "nortbound-dispatcher-api"
+    },
+    "logging": {
+        "version": 1,
+        "handlers": {            
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "console"
+            }
+        },
+        "loggers": {
+            "requests.packages.urllib3": {
+                "level": "DEBUG",
+                "handlers": [
+                    "console"
+                ],
+                "propagate": true
+            },
+            "requests": {
+                "level": "DEBUG",
+                "handlers": [
+                    "console"
+                ],
+                "propagate": true
+            }
+        },
+        "root": {
+            "level": "DEBUG",
+            "handlers": [
+                "console"
+            ]
+        },
+        "formatters": {
+            "file": {
+                "format": "%(asctime)s (%(levelname)s) %(name)s : %(message)s"
+            },
+            "console": {
+                "format": "%(levelname)s: %(message)s"
+            },
+            "debug": {
+                "format": "%(asctime)s (%(levelname)s) %(name)s : %(message)s"
+            }
+        }
+    }
+}
