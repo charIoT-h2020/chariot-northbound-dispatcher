@@ -22,13 +22,16 @@ opts = open_config_file()
 options_engine = opts.northbound_dispatcher
 options_tracer = opts.tracer
 
-tracer = Tracer(options_tracer)
-tracer.init_tracer()
-
 app = falcon.API()
 
 sink = SinkAdapter()
-sink.inject_tracer(tracer)
+
+sink.add_services(options_engine['services'])
+
+if options_tracer['enabled']:
+    tracer = Tracer(options_tracer)
+    tracer.init_tracer()
+    sink.inject_tracer(tracer)
 
 app.add_sink(sink, r'/(?P<engine>[a-zA-Z]+)(/(?P<path>.*))?\Z')
 
