@@ -42,7 +42,7 @@
             "safety"
         ],
         "services": {
-            "alerts": "http://localhost:9000/alerts/%s?%s"
+            "alerts": "http://localhost:8030/alerts/%s?%s"
         },
         "database": "fog_logs",
         "table": "message",
@@ -70,7 +70,7 @@
                 ],
                 "propagate": true
             },
-            "requests": {
+            "gunicorn.error": {
                 "level": "DEBUG",
                 "handlers": [
                     "console"
