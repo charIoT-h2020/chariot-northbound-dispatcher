@@ -10,6 +10,7 @@ import logging
 import falcon
 import falcon_jsonify
 import uvicorn
+import time
 
 from chariot_base.connector import LocalConnector
 
@@ -27,7 +28,11 @@ class SouthboundConnector(LocalConnector):
         super(SouthboundConnector, self).__init__()
 
     def on_message(self, client, topic, payload, qos, properties):
-        pass
+        msg = payload.decode('utf-8')
+        deserialized_model = json.loads(msg)
+        span = self.start_span_from_message('on_message', deserialized_model)
+        time.sleep(.050)
+        self.close_span(span)
 
 
 class NorthboundConnector(LocalConnector):
@@ -64,7 +69,11 @@ async def main(args=None):
     northbound.register_for_client(client_north)
 
     dispatcher = Dispatcher()
+    dispatcher.inject(southbound, northbound)
+    dispatcher.inject_tracer(tracer)
+    dispatcher.subscribe_to_southbound()
 
+    logging.info('Waiting message from Southbound Dispatcher')
     await STOP.wait()
     await client_south.disconnect()
     await client_north.disconnect()
