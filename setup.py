@@ -14,7 +14,7 @@ with open('HISTORY.md') as history_file:
 requirements = [
     'falcon',
     'influxdb',
-    'chariot_base==0.7.0',
+    'chariot_base==0.8.0',
     'paho-mqtt',
     'asyncio',
     'gmqtt',
