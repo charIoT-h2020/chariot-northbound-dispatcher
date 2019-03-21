@@ -26,14 +26,20 @@ from chariot_base.connector import LocalConnector, create_client
 class SouthboundConnector(LocalConnector):
     def __init__(self, options):
         super(SouthboundConnector, self).__init__()
+        self.dispatcher = None
 
     def on_message(self, client, topic, payload, qos, properties):
         msg = payload.decode('utf-8')
         deserialized_model = json.loads(msg)
         span = self.start_span_from_message('on_message', deserialized_model)
-        time.sleep(.050)
-        self.close_span(span)
+        try:
+            self.dispatcher.forward(deserialized_model, span)
+            self.close_span(span)
+        except Exception as ex:
+            self.error(span, ex)
 
+    def inject_dispatcher(self, dispatcher):
+        self.dispatcher = dispatcher
 
 class NorthboundConnector(LocalConnector):
     def __init__(self, options):
@@ -69,11 +75,12 @@ async def main(args=None):
     northbound.register_for_client(client_north)
 
     dispatcher = Dispatcher()
+    southbound.inject_dispatcher(dispatcher)
     dispatcher.inject(southbound, northbound)
     dispatcher.inject_tracer(tracer)
     dispatcher.subscribe_to_southbound()
 
-    logging.info('Waiting message from Southbound Dispatcher')
+    logging.info('Waiting message from Privacy Engine')
     await STOP.wait()
     await client_south.disconnect()
     await client_north.disconnect()
