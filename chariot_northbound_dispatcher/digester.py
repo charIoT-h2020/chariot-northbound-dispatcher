@@ -59,8 +59,6 @@ async def main(args=None):
     options_engine = opts.northbound_dispatcher
     options_tracer = opts.tracer
 
-    logging.debug()
-
     tracer = Tracer(options_tracer)
     tracer.init_tracer()
 
