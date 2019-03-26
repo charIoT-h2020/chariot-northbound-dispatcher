@@ -62,6 +62,8 @@ async def main(args=None):
     tracer = Tracer(options_tracer)
     tracer.init_tracer()
 
+    logging.debug("host: {host}:{port}, enabled: {enabled}, service: {service}".format(**options_tracer))
+
     southbound = SouthboundConnector(options_engine)
     southbound.inject_tracer(tracer)
     client_south = await create_client(opts.brokers.southbound)
