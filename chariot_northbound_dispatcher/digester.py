@@ -9,7 +9,6 @@ import signal
 import logging
 import falcon
 import falcon_jsonify
-import uvicorn
 import time
 
 from chariot_base.connector import LocalConnector
@@ -18,7 +17,6 @@ from chariot_northbound_dispatcher.dispatcher import Dispatcher
 from chariot_northbound_dispatcher.resources import SubscriberResource
 
 from chariot_base.utilities import open_config_file, Tracer
-from chariot_base.utilities.iotlwrap import IoTLWrapper
 
 from chariot_base.connector import LocalConnector, create_client
 
@@ -60,6 +58,8 @@ async def main(args=None):
 
     options_engine = opts.northbound_dispatcher
     options_tracer = opts.tracer
+
+    logging.debug()
 
     tracer = Tracer(options_tracer)
     tracer.init_tracer()
