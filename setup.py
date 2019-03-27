@@ -14,7 +14,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'falcon',
     'influxdb',
-    'chariot_base==0.8.0',
+    'chariot_base==0.8.2',
     'paho-mqtt',
     'asyncio',
     'gmqtt',
