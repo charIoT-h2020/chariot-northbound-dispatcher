@@ -35,6 +35,7 @@ class SouthboundConnector(LocalConnector):
             self.close_span(span)
         except Exception as ex:
             self.error(span, ex)
+            logging.error(ex)
 
     def inject_dispatcher(self, dispatcher):
         self.dispatcher = dispatcher

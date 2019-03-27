@@ -28,13 +28,17 @@ class Dispatcher(Traceable):
         self.southbound.subscribe('northbound/#', qos=0)
 
     def forward(self, message, span):
-        destination = message['destination']
-        sensor_id = message['sensor_id']
-        value = json.dumps(message['value'])
-        logging.debug('Message %s from %s send to %s' % (value, sensor_id, destination))
+        try:
+            destination = message['destination']
+            sensor_id = message['sensor_id']
+            value = json.dumps(message['value'])
 
-        self.set_tag(span, 'destination', destination)
+            logging.debug('Message %s from %s send to %s' % (value, sensor_id, destination))
+            self.set_tag(span, 'destination', destination)
 
-        if self.subscribers[destination] is not None:
-            if sensor_id in self.subscribers[destination].sensors:
-                self.northbound.publish('%s/%s' % (destination, sensor_id), value)
+            if self.subscribers[destination] is not None:
+                if sensor_id in self.subscribers[destination].sensors:
+                    self.northbound.publish('%s/%s' % (destination, sensor_id), value)
+
+        except:
+            raise
