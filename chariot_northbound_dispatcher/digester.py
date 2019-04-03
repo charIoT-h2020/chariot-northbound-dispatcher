@@ -75,7 +75,7 @@ async def main(args=None):
     client_north = await create_client(opts.brokers.northbound)
     northbound.register_for_client(client_north)
 
-    dispatcher = Dispatcher()
+    dispatcher = Dispatcher(options_engine)
     southbound.inject_dispatcher(dispatcher)
     dispatcher.inject(southbound, northbound)
     dispatcher.inject_tracer(tracer)

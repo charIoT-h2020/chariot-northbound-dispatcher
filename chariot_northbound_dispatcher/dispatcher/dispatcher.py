@@ -8,13 +8,17 @@ from chariot_base.model import Subscriber
 
 
 class Dispatcher(Traceable):
-    def __init__(self):
+    def __init__(self, options):
         self.tracer = None
         self.southbound = None
         self.northbound = None
 
         self.session = requests.Session()
         self.session.trust_env = False
+        self.options = options
+
+        if 'subscriber_url' not in self.options:
+            raise Exception('subscriber_url is missing')
 
     def inject(self, southbound, northbound):
         self.southbound = southbound
@@ -26,13 +30,13 @@ class Dispatcher(Traceable):
     def forward(self, message, span):
         try:
             destination = message['destination']
-            sensor_id = message['sensor_id']
+            sensor_id = message['sensor_id'].lower()
             value = json.dumps(message['value'])
 
             logging.debug('Message %s from %s send to %s' % (value, sensor_id, destination))
             self.set_tag(span, 'destination', destination)
 
-            url = 'http://172.18.1.20:8031/subscriber/{destination}'.format(**{'destination': destination})
+            url = self.options['subscriber_url'].format(**{'destination': destination})
             headers = self.inject_to_request_header(span, url)
             self.set_tag(span, 'url', url)
             logging.debug('Retrieving subscription for: %s/%s' % (url, headers))
@@ -40,7 +44,7 @@ class Dispatcher(Traceable):
 
             if result is not None:
                 info = result.json()
-                logging.debug('Retrieve subscription info: %s' % (info))
+                logging.debug('Retrieve subscription %s info: %s' % (sensor_id, info))
 
                 if sensor_id in info['sensors']:
                     topic = '%s/%s' % (destination, sensor_id)

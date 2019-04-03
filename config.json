@@ -41,6 +41,7 @@
             "privacy",
             "safety"
         ],
+        "subscriber_url": "http://linux.machine:8080/subscriber/{destination}",
         "services": {
             "alerts": "http://localhost:8030/alerts/%s?%s"
         },
