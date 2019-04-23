@@ -13,6 +13,7 @@ with open('HISTORY.rst') as history_file:
 
 requirements = [
     'falcon',
+    'falcon-multipart',
     'influxdb',
     'chariot_base==0.9.0',
     'paho-mqtt',

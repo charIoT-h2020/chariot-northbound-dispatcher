@@ -14,7 +14,6 @@ import time
 from chariot_base.connector import LocalConnector
 
 from chariot_northbound_dispatcher.dispatcher import Dispatcher
-from chariot_northbound_dispatcher.resources import SubscriberResource
 
 from chariot_base.utilities import open_config_file, Tracer
 
