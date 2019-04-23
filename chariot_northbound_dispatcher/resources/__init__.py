@@ -1,1 +1,1 @@
-from .subscriber import SubscriberResource
+from .forward import SinkAdapter

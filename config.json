@@ -43,7 +43,8 @@
         ],
         "subscriber_url": "http://linux.machine:8080/subscriber/{destination}",
         "services": {
-            "alerts": "http://localhost:8030/alerts/%s?%s"
+            "alerts": "http://localhost:8030/alerts/%s?%s",
+            "firmware": "http://localhost:9000/firmware/%s?%s"
         },
         "database": "fog_logs",
         "table": "message",

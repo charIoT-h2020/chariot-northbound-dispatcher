@@ -10,6 +10,7 @@ import logging
 import falcon
 import falcon_jsonify
 from wsgiref import simple_server
+from falcon_multipart.middleware import MultipartMiddleware
 
 from chariot_northbound_dispatcher.resources.forward import SinkAdapter
 from chariot_base.utilities import Tracer
@@ -22,7 +23,10 @@ opts = open_config_file()
 options_engine = opts.northbound_dispatcher
 options_tracer = opts.tracer
 
-app = falcon.API()
+app = falcon.API(middleware=[
+    MultipartMiddleware(),
+    # falcon_jsonify.Middleware(help_messages=True),
+])
 
 sink = SinkAdapter()
 
