@@ -23,7 +23,7 @@ class SinkAdapter(Traceable):
     def __call__(self, req, resp, engine, path=None):
         path = path or ''
         q = req.query_string or ''
-        logging.debug('Path: %s, Q: %s %s' % (path, q, req.headers['CONTENT-TYPE']))
+        logging.debug('Path: %s, Q: %s' % (path, q))
 
         span = self.start_span('forward_message')
         url = self.services[engine]
@@ -31,7 +31,7 @@ class SinkAdapter(Traceable):
         span.set_tag('url', url)
         headers = self.inject_to_request_header(span, url)
 
-        if req.content_type.find('multipart/form-data') > -1:
+        if req.content_type is not None and req.content_type.find('multipart/form-data') > -1:
             try:
                 logging.info('Forward multipart request')
                 files = {}
@@ -70,6 +70,7 @@ class SinkAdapter(Traceable):
                 result = self.session.get(url, headers=headers)
 
         resp.status = str(result.status_code) + ' ' + result.reason
+        logging.error(result.headers.keys())
         resp.content_type = result.headers['content-type']
         resp.body = result.text
         self.close_span(span)
