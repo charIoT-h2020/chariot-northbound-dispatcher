@@ -61,7 +61,7 @@ class SinkAdapter(Traceable):
             elif req.method == 'PATCH':
                 result = self.session.patch(url, headers=headers, json=data)
             elif req.method == 'DELETE':
-                result = self.session.delete(url, headers=headers)
+                result = self.session.delete(url, headers=headers, json=data)
             elif req.method == 'HEAD':
                 result = self.session.head(url, headers=headers)
             elif req.method == 'OPTIONS':
