@@ -70,7 +70,7 @@ class SinkAdapter(Traceable):
                 result = self.session.get(url, headers=headers)
 
         resp.status = str(result.status_code) + ' ' + result.reason
-        logging.error(result.headers.keys())
+
         resp.content_type = result.headers['content-type']
         resp.body = result.text
         self.close_span(span)
