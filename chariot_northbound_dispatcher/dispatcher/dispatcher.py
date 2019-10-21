@@ -31,7 +31,9 @@ class Dispatcher(Traceable):
         try:
             destination = message['destination']
             sensor_id = message['sensor_id'].lower()
-            value = json.dumps(message['value'])
+            original_message = json.loads(message['value'])
+            message['value'] = original_message
+            value = message
 
             logging.debug('Message %s from %s send to %s' % (value, sensor_id, destination))
             self.set_tag(span, 'destination', destination)
