@@ -48,7 +48,7 @@
         },
         "database": "fog_logs",
         "table": "message",
-        "listen": "dispatcher/#"
+        "listen": "northbound/#"
     },
     "tracer" : {
         "host": "localhost",

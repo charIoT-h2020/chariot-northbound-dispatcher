@@ -13,7 +13,7 @@ import time
 
 from chariot_base.connector import LocalConnector
 
-from chariot_northbound_dispatcher import __service_name__
+from chariot_northbound_dispatcher import __service_name_listener__
 from chariot_northbound_dispatcher.dispatcher import Dispatcher
 
 from chariot_base.utilities import open_config_file, Tracer
@@ -29,6 +29,7 @@ class SouthboundConnector(LocalConnector):
     def on_message(self, client, topic, payload, qos, properties):
         msg = payload.decode('utf-8')
         deserialized_model = json.loads(msg)
+        logging.debug(f'Receive messages: {deserialized_model}')
         span = self.start_span_from_message('on_message', deserialized_model)
         try:
             self.dispatcher.forward(deserialized_model, span)
@@ -63,8 +64,8 @@ async def main(args=None):
 
     tracer = None
     if options_tracer['enabled']:
-        options_tracer['service'] = __service_name__
-        logging.debug(f'Enabling tracing for service "{__service_name__}"')
+        options_tracer['service'] = __service_name_listener__
+        logging.debug(f'Enabling tracing for service "{__service_name_listener__}"')
         tracer = Tracer(options_tracer)
         tracer.init_tracer()
 
