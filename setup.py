@@ -15,7 +15,7 @@ requirements = [
     'falcon',
     'falcon-multipart',
     'influxdb',
-    'chariot_base==0.11.1',
+    'chariot_base',
     'paho-mqtt',
     'asyncio',
     'gmqtt',

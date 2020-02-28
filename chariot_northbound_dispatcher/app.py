@@ -8,7 +8,7 @@ import asyncio
 import signal
 import logging
 import falcon
-import falcon_jsonify
+
 from wsgiref import simple_server
 from falcon_multipart.middleware import MultipartMiddleware
 
@@ -25,7 +25,6 @@ options_tracer = opts.tracer
 
 app = falcon.API(middleware=[
     MultipartMiddleware(),
-    # falcon_jsonify.Middleware(help_messages=True),
 ])
 
 sink = SinkAdapter()

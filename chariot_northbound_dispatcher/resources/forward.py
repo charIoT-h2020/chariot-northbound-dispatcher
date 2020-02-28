@@ -21,26 +21,32 @@ class SinkAdapter(Traceable):
         self.session.trust_env = False
 
     def __call__(self, req, resp, engine, path=None):
-        path = path or ''
-        q = req.query_string or ''
+        try:
+            path = path or ''
+            q = req.query_string or ''
 
-        span = self.start_span('forward_message')
-        url = self.get_service_url(span, req, resp, engine, path)
-        span.set_tag('url', url)
+            span = self.start_span('forward_message')
+            url = self.get_service_url(span, req, resp, engine, path)
+            span.set_tag('url', url)
 
-        headers = self.inject_to_request_header(span, url)
+            headers = self.inject_to_request_header(span, url)
 
-        if req.content_type is not None and req.content_type.find('multipart/form-data') > -1:
-            result = self.forward_file(req, resp)
-        else:
-            data = self.get_body(req, resp)
-            result = self.forward(req, resp, url, headers, data)
+            if req.content_type is not None and req.content_type.find('multipart/form-data') > -1:
+                result = self.forward_file(req, resp)
+            else:
+                data = self.get_body(req, resp)
+                result = self.forward(req, resp, url, headers, data)
 
-        resp.status = str(result.status_code) + ' ' + result.reason
+            resp.status = f'{result.status_code} {result.reason}'
 
-        resp.content_type = result.headers['content-type']
-        resp.body = result.text
-        self.close_span(span)
+            resp.content_type = result.headers['content-type']
+            resp.body = result.text
+            self.close_span(span)
+        except Exception as ex:
+            logging.error(ex)
+            self.set_tag(span, 'is_ok', False)
+            self.error(span, ex, False)
+            self.close_span(span)
 
     def forward_file(self, req, resp):
         try:
