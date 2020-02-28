@@ -13,6 +13,7 @@ import time
 
 from chariot_base.connector import LocalConnector
 
+from chariot_northbound_dispatcher import __service_name__
 from chariot_northbound_dispatcher.dispatcher import Dispatcher
 
 from chariot_base.utilities import open_config_file, Tracer
@@ -34,6 +35,7 @@ class SouthboundConnector(LocalConnector):
             self.close_span(span)
         except Exception as ex:
             self.error(span, ex)
+            self.close_span(span)
             logging.error(ex)
 
     def inject_dispatcher(self, dispatcher):
@@ -59,10 +61,12 @@ async def main(args=None):
     options_engine = opts.northbound_dispatcher
     options_tracer = opts.tracer
 
-    tracer = Tracer(options_tracer)
-    tracer.init_tracer()
-
-    logging.debug("host: {host}:{port}, enabled: {enabled}, service: {service}".format(**options_tracer))
+    tracer = None
+    if options_tracer['enabled']:
+        options_tracer['service'] = __service_name__
+        logging.debug(f'Enabling tracing for service "{__service_name__}"')
+        tracer = Tracer(options_tracer)
+        tracer.init_tracer()
 
     southbound = SouthboundConnector(options_engine)
     southbound.inject_tracer(tracer)

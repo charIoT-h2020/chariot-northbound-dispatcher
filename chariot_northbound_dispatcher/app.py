@@ -12,11 +12,11 @@ import falcon_jsonify
 from wsgiref import simple_server
 from falcon_multipart.middleware import MultipartMiddleware
 
-from chariot_northbound_dispatcher.resources.forward import SinkAdapter
 from chariot_base.utilities import Tracer
-
-
 from chariot_base.utilities import open_config_file
+
+from chariot_northbound_dispatcher import __service_name__
+from chariot_northbound_dispatcher.resources.forward import SinkAdapter
 
 opts = open_config_file()
 
@@ -33,6 +33,9 @@ sink = SinkAdapter()
 sink.add_services(options_engine['services'])
 
 if options_tracer['enabled']:
+    options_tracer['service'] = __service_name__
+    logging.debug(f'Enabling tracing for service "{__service_name__}"')
+
     tracer = Tracer(options_tracer)
     tracer.init_tracer()
     sink.inject_tracer(tracer)
