@@ -92,19 +92,18 @@ class SinkAdapter(Traceable):
         return result
 
     def get_service_url(self, span, req, resp, engine, path=None):
-        path = path or ''
-        q = req.query_string or ''
+        path = path.strip("/") or ''
+        q = req.query_string.strip("?") or ''
         url = self.services[engine]
-        url = url % (path, q)
+
+        if path != '':
+            url = f'{url}/{path}'
+
+        if q != '':
+            url = f'{url}?{q}'
+
         span.set_tag('url', url)
         logging.debug(f'Url: {url}, Path: {path}, Q: {q}')
-
-        if not q:
-            url = url.replace('?', '')
-
-        if not path:
-            url = url.strip("/")
-
         return url
 
     def add_services(self, services):
