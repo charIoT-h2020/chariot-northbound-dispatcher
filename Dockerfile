@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 # Bundle app source
 COPY . .
 
-RUN pip install falcon-jsonify && python setup.py install
+RUN pip install gmqtt -U && pip install falcon-jsonify && python setup.py install
 
 EXPOSE 5080
 

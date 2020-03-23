@@ -15,9 +15,7 @@ from chariot_base.connector import LocalConnector
 
 from chariot_northbound_dispatcher import __service_name_listener__
 from chariot_northbound_dispatcher.dispatcher import Dispatcher
-
 from chariot_base.utilities import open_config_file, Tracer
-
 from chariot_base.connector import LocalConnector, create_client
 
 
@@ -41,6 +39,22 @@ class SouthboundConnector(LocalConnector):
 
     def inject_dispatcher(self, dispatcher):
         self.dispatcher = dispatcher
+
+    def on_connect(self, client, flags, rc, properties=None):
+        self.connected = True
+        self.connack = (flags, rc, properties)
+        if rc == 0:
+            self.subscribe_to_topics()
+
+    def set_topics(self, topics):
+        self.topics = topics
+
+    def subscribe_to_topics(self):
+        subscriptions = []
+        for topic in self.topics:
+            subscriptions.append(gmqtt.Subscription(topic, qos=1))
+        self.client.subscribe(subscriptions, subscription_identifier=2)
+        logging.info('Waiting for raised alerts...')
 
 class NorthboundConnector(LocalConnector):
     def __init__(self, options):
@@ -83,6 +97,7 @@ async def main(args=None):
     southbound.inject_dispatcher(dispatcher)
     dispatcher.inject(southbound, northbound)
     dispatcher.inject_tracer(tracer)
+
     dispatcher.subscribe_to_southbound()
 
     logging.info('Waiting message from Privacy Engine')

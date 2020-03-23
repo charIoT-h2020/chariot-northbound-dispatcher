@@ -25,7 +25,8 @@ class Dispatcher(Traceable):
         self.northbound = northbound
 
     def subscribe_to_southbound(self):
-        self.southbound.subscribe(self.options['listen'], qos=0)
+        self.southbound.set_topics([self.options['listen']])
+        self.southbound.subscribe_to_topics()
 
     def forward(self, message, span):
         try:
